@@ -1,11 +1,5 @@
 <?php
-namespace wxpay\realize;
-
-use wxpay\lib\Api\WxPayApi;
-use wxpay\lib\Data\WxPayOrderQuery;
-use wxpay\lib\Data\WxPayReverse;
-use wxpay\lib\Exception\WxPayException;
-
+require_once "../lib/WxPay.Api.php";
 /**
  * 
  * 刷卡支付实现类

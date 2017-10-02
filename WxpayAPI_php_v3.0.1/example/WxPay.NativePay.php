@@ -1,7 +1,5 @@
 <?php
-namespace wxpay\realize;
-
-use wxpay\lib\Api\WxPayApi;
+require_once "../lib/WxPay.Api.php";
 
 /**
  * 
@@ -20,7 +18,7 @@ class NativePay
 	{
 		$biz = new WxPayBizPayUrl();
 		$biz->SetProduct_id($productId);
-		$values = WxPayApi::bizpayurl($biz);
+		$values = WxpayApi::bizpayurl($biz);
 		$url = "weixin://wxpay/bizpayurl?" . $this->ToUrlParams($values);
 		return $url;
 	}

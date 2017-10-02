@@ -105,6 +105,11 @@ class Wxpay {
 			$order['paySign'] = md5('appId=' . config('wxpay.appid') . '&nonceStr=' . $order['nonce_str'] . '&package=' . $order['package'] . '&signType=MD5&timeStamp=' . $order['timeStamp'] . '&key=' . config('wxpay.key'));
 			$order['signType'] = 'MD5';
 		}
+		$order['need_timeStamp']=$order['timeStamp'];
+		$order['need_nonceStr']=$order['nonce_str'];
+		$order['need_package']=$order['package'];
+		$order['need_signType']=$order['signType'];
+		$order['need_paySign']=$order['paySign'];
 		return $order;
 	}
 
@@ -141,7 +146,7 @@ class Wxpay {
 
 		$return = $order;
 		$return['jsApiParameters'] = $tools->GetJsApiParameters($order);
-		$return['$editAddress'] = $tools->GetEditAddressParameters();
+		$return['editAddress'] = $tools->GetEditAddressParameters();
 		return $return;
 	}
 

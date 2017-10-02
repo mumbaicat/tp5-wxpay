@@ -1,6 +1,4 @@
 <?php
-namespace wxpay\lib\Config;
-
 /**
 * 	配置账号信息
 */
@@ -24,15 +22,10 @@ class WxPayConfig
 	 * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
 	 * @var string
 	 */
-	// const APPID = 'wx426b3015555a46be';
-	// const MCHID = '1900009851';
-	// const KEY = '8934e7d15453e97507ef794cf7b0519d';
-	// const APPSECRET = '7813490da6f1265e4901ffb80afaa36f';
-	
-	public static $appid;
-	public static $mchid;
-	public static $key;
-	public static $appsecret;
+	const APPID = 'wx426b3015555a46be';
+	const MCHID = '1900009851';
+	const KEY = '8934e7d15453e97507ef794cf7b0519d';
+	const APPSECRET = '7813490da6f1265e4901ffb80afaa36f';
 	
 	//=======【证书路径设置】=====================================
 	/**
@@ -41,8 +34,8 @@ class WxPayConfig
 	 * API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
 	 * @var path
 	 */
-	const SSLCERT_PATH = '../../cert/apiclient_cert.pem';
-	const SSLKEY_PATH = '../../cert/apiclient_key.pem';
+	const SSLCERT_PATH = '../cert/apiclient_cert.pem';
+	const SSLKEY_PATH = '../cert/apiclient_key.pem';
 	
 	//=======【curl代理设置】===================================
 	/**
@@ -63,16 +56,4 @@ class WxPayConfig
 	 * @var int
 	 */
 	const REPORT_LEVENL = 1;
-
-	static public function init(){
-	        self::$appid     = config('wxpay.appid');
-	        self::$mchid     = config('wxpay.mchid');
-	        self::$key       = config('wxpay.key');
-	        self::$appsecret = config('wxpay.appsecret');
-	}
-	static public function mini_init(){
-		self::$appid     = config('wxpay.mini_appid');
-		self::$appsecret = config('wxpay.mini_appsecret');
-	}
 }
-// WxPayConfig::init();

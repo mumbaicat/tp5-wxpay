@@ -1,11 +1,5 @@
 <?php
-namespace wxpay\realize;
-
-use wxpay\lib\Api\WxPayApi;
-use wxpay\lib\Data\WxPayJsApiPay;
-
-use wxpay\lib\Exception\WxPayException;
-
+require_once "../lib/WxPay.Api.php";
 /**
  * 
  * JSAPI支付实现类
