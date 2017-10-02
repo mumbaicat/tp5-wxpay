@@ -84,7 +84,7 @@ class Wxpay {
 	 * @param  string  $tag        标签,没卵用
 	 * @return array              小程序订单信息
 	 */
-	public function miniPay($title = '小程序支付', $money = 1, $openId, $notifyUrl, $orderID = false, $tag = 'www.pixelgm.com') {
+	public function miniPay($title = '小程序支付', $money = 1, $openId, $notifyUrl, $orderID = false, $time=300,$tag = 'www.pixelgm.com') {
 		WxPayConfig::mini_init();
 		$input = new WxPayUnifiedOrder();
 		$input->SetBody($title);
@@ -106,10 +106,10 @@ class Wxpay {
 		if ($order['result_code'] == 'SUCCESS' && $order['return_code'] == 'SUCCESS') {
 			$order['timeStamp'] = (string) $_SERVER['REQUEST_TIME'];
 			$order['package'] = 'prepay_id=' . $order['prepay_id'];
-			$order['paySign'] = md5('appId=' . config('wxpay.appid') . '&nonceStr=' . $order['nonce_str'] . '&package=' . $order['package'] . '&signType=MD5&timeStamp=' . $order['timeStamp'] . '&key=' . config('wxpay.key'));
+			$order['paySign'] = md5('appId=' . config('wxpay.mini_appid') . '&nonceStr=' . $order['nonce_str'] . '&package=' . $order['package'] . '&signType=MD5&timeStamp=' . $order['timeStamp'] . '&key=' . config('wxpay.key'));
 			$order['signType'] = 'MD5';
 		}
-		$order['need_timeStamp']=$order['timeStamp'];
+		$order['need_timeStamp']=(string)$order['timeStamp'];
 		$order['need_nonceStr']=$order['nonce_str'];
 		$order['need_package']=$order['package'];
 		$order['need_signType']=$order['signType'];

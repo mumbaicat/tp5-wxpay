@@ -9,6 +9,7 @@ namespace wxpay\lib\Api;
 use wxpay\lib\Exception\WxPayException;
 use wxpay\lib\Config\WxPayConfig;
 use wxpay\lib\Data\WxPayResults;
+use wxpay\lib\Data\WxPayReport;
 
 /**
  * 
