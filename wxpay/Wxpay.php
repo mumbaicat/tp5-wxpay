@@ -1,4 +1,8 @@
 <?php
+/**
+ * 微信支付类
+ * @author Dust <1272294450@qq.com>
+ */
 namespace wxpay;
 
 use wxpay\lib\Api\WxPayApi;
