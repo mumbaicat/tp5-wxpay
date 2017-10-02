@@ -1,6 +1,9 @@
 <?php
 namespace wxpay\lib\Notify;
 
+use wxpay\lib\Api\WxPayApi;
+use wxpay\lib\Data\WxPayNotifyReply;
+
 /**
  *
  * 回调基础类

@@ -1,6 +1,8 @@
 <?php 
 namespace wxpay\realize;
 
+use wxpay\lib\Api\WxPayApi;
+use wxpay\lib\Data\WxPayOrderQuery;
 use wxpay\lib\Notify\WxPayNotify;
 
 class PayNotifyCallBack extends WxPayNotify{
@@ -10,7 +12,6 @@ class PayNotifyCallBack extends WxPayNotify{
 		$input = new WxPayOrderQuery();
 		$input->SetTransaction_id($transaction_id);
 		$result = WxPayApi::orderQuery($input);
-		Log::DEBUG("query:" . json_encode($result));
 		if(array_key_exists("return_code", $result)
 			&& array_key_exists("result_code", $result)
 			&& $result["return_code"] == "SUCCESS"
@@ -24,7 +25,6 @@ class PayNotifyCallBack extends WxPayNotify{
 	//重写回调处理函数
 	public function NotifyProcess($data, &$msg)
 	{
-		Log::DEBUG("call back:" . json_encode($data));
 		$notfiyOutput = array();
 		
 		if(!array_key_exists("transaction_id", $data)){
