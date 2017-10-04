@@ -16,7 +16,7 @@ Thinkphp5 命名空间版微信支付
   * 小程序支付模式
 
 ## 目录结构  
-  * wxpay   扩展文件,把这个文件夹放在extends文件夹里
+  * wxpay   扩展文件,把这个文件夹放在extend文件夹里
   * application  示例Demo
   * WxpayAPI_php_v3.0.1   微信支付官方的PHPSDK
 
