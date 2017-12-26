@@ -1,6 +1,6 @@
 Thinkphp5 命名空间版微信支付  
 ==========  
-作者: [Dust](http://pixelgm.com)  
+作者: [Dust](http://dust101.lofter.com)  
 
 ## 对官方PHPSDK进行改进和封装:  
   * 修复了官方SDK中postxml中SSL版本问题
