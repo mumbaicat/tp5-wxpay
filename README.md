@@ -14,6 +14,8 @@ Thinkphp5 命名空间版微信支付
   * JSAPI支付模式
   * 扫码支付模式
   * 小程序支付模式
+  * 添加了aes解密，可以获取手机号什么的 [链接](https://blog.csdn.net/jimolangyaleng/article/details/78484258)
+  * 3.2的还没搞完，但是能用
 
 ## 目录结构  
   * wxpay   扩展文件,把这个文件夹放在extend文件夹里

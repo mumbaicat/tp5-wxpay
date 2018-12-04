@@ -14,6 +14,9 @@ use wxpay\realize\PayNotifyCallBack;
 use wxpay\realize\NativePay;
 use wxpay\realize\JsApiPay;
 
+use wxpay\aes\WxBizDataCrypt;
+
+
 class Wxpay {
 
 	/**
@@ -184,5 +187,27 @@ class Wxpay {
 		$output = curl_exec($ch);
 		curl_close($ch);
 		return $output;
+	}
+
+	/**
+	 * 小程序aes解密
+	 *
+	 * @param string $sessionKey sessionKey
+	 * @param string $encryptedData encryptedData
+	 * @param string $iv iv
+	 * @return mixed
+	 */
+	public function aes($sessionKey,$encryptedData,$iv){
+	    $appid = config('wxpay.mini_appid');
+	    $pc = new WxBizDataCrypt($appid, $sessionKey);
+	    $data = '';
+        $errCode = $pc->decryptData($encryptedData, $iv, $data );
+        
+        if ($errCode == 0) {
+            return $data;
+        } else {
+            return $errCode;
+        }
+
 	}
 }
