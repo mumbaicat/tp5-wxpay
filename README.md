@@ -2,7 +2,7 @@ Thinkphp5 命名空间版微信支付
 ==========  
 作者: [Dust](http://dust101.lofter.com)  
 
-## 对官方PHPSDK进行改进和封装:  
+## 对官方PHPSDK（v3.0.1）进行改进和封装:  
   * 修复了官方SDK中postxml中SSL版本问题
   * 官方SDK改为namespace版(如要其他框架使用请修改WxPayConfig.php里的config函数)
   * 修改SDK中的大小写错误
@@ -20,7 +20,6 @@ Thinkphp5 命名空间版微信支付
 ## 目录结构  
   * wxpay   扩展文件,把这个文件夹放在extend文件夹里
   * application  示例Demo
-  * WxpayAPI_php_v3.0.1   微信支付官方的PHPSDK
 
 ## 配置
 请在配置文件添加配置信息，结构如下（mini_开头为小程序,不需要则不填写）：

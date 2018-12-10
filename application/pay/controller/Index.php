@@ -23,7 +23,7 @@ class Index extends Controller {
 		return $this->fetch('pay');
 	}
 
-	// 生成二维码  对应上面的操作方法
+	// 扫码支付 生成二维码  对应上面的操作方法
 	public function makeqr() {
 		$text = input('text');
 		$text = base64_decode($text); //base64
@@ -40,7 +40,7 @@ class Index extends Controller {
 		return $this->fetch('js');
 	}
 
-	// 小程序获取openid
+	// 小程序 获取openid
 	public function getid() {
 		$code = input('post.code');
 		if (empty($code)) {
@@ -51,7 +51,7 @@ class Index extends Controller {
 		return $info;
 	}
 
-	// 小程序aes解密
+	// 小程序 aes解密（获取手机号等）
 	public function aes() {
 		$sessionKey = input('post.sessionKey');
 		$encryptedData = input('post.encryptedData');
@@ -64,21 +64,122 @@ class Index extends Controller {
 		return $data;
 	}
 
-	// 小程序支付
+	// 小程序 通过微信获取手机号登陆 例子
+    // 比 aes 上多个几个字段
+    // openid
+    // avator
+    // nickname
+	// sex
+	// 小程序代码参考：
+	/*
+	// <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">一键登录</button>
+	// 获取用户手机号
+	getPhoneNumber: function (e) {
+		console.log(e.detail.errMsg)
+		console.log(e.detail.iv)
+		console.log(e.detail.encryptedData)
+		if (e.detail.errMsg == 'getPhoneNumber:fail user deny') {
+		wx.showModal({
+			title: '提示',
+			showCancel: false,
+			content: '未授权',
+			success: function (res) { }
+		})
+		} else {
+		wx.getUserInfo({
+			success: function (res) {
+			console.log('获取到的用户数据' + JSON.stringify(res));
+			var userInfo = res.userInfo
+			var nickName = userInfo.nickName
+			var avatarUrl = userInfo.avatarUrl
+			var gender = userInfo.gender //性别 0：未知、1：男、2：女
+			wx.request({
+				url: 'https://xiaochengxu.cqyunwen.com/api/user/wxlogin',
+				data: {
+				'sessionKey': wx.getStorageSync('session_key'),
+				'encryptedData': e.detail.encryptedData,
+				'iv': e.detail.iv,
+				'openid': wx.getStorageSync('openid'),
+				'avator': avatarUrl,
+				'nickname': nickName,
+				'sex': gender
+				},
+				method: 'POST',
+				success: function (x) {
+				console.log(x.data);
+				wx.setStorageSync('token', x.data.data.token);
+				wx.navigateBack({
+					delta: 2
+				})
+				}
+			})
+			}
+		});
+		}
+	},
+	*/
+    public function wxlogin(){
+        $jsonData = $this->aes();
+        $openid = input('post.openid');
+        $avator = input('post.avator');
+        $nickName = input('post.nickname');
+        $sex = input('post.sex');
+        $sessionKey = input('post.sessionKey');
+        if(empty($openid) or empty($avator) or empty($nickName) or empty($sex)){
+            return make_return_json(500,'提交数据不完整');
+        }
+        $data = json_decode($jsonData,true);
+        if(empty($data['purePhoneNumber'])){
+            return make_return_json(500,'登陆失败');
+        }
+        $phone = $data['purePhoneNumber'];
+        $model = UserModel::get(function($query) use($phone){
+            $query->where('phone',$phone);
+        });
+        if(!$model){
+            // 用户不存在，注册
+        	$model = $this->reg($nickName.'_'.$phone,$phone,str_random(16));
+		}
+		// 存在可以更新下微信信息
+        $avatorPath  = $this->saveImage($avator,$model->id);
+        $model->weixin = [
+            'openid' => $openid,
+            'session_key' => $sessionKey
+        ];
+        $model->avator = $avatorPath;
+        $model->save();
+        return make_return_json(200,'success',['token'=>$model->token,'name'=>$model->name]);
+    }
+
+	// 小程序 支付
 	public function miniPay() {
+		// 比如说一个订单表，用其他的 Action 去写插入订单表的，获取订单号，然后带着订单号调用本 Action 去做微信支付
 		$openid = input('post.openid');
 		$pay = new Wxpay();
+		// 参数3回调地址，URL中可以放传递参数，/notify/oid/1
 		$order = $pay->miniPay('一分钱的商品', 1, $openid, url('notify', '', false, true));
+		if (empty($order['need_nonceStr'])) {
+			exit('获取失败,估计配置信息没填写');
+		}
+		// $orderData->weixin = $order; // 可以把下单信息存进去，$order['prepay_id'] 是微信下单号
 		return json_encode($order);
 	}
 
-	// 回调处理
+	// 回调处理，微信服务器发来的是POST方式，URL中可以放传递参数，/notify/oid/1
 	public function notify() {
-		$pay = new Wxpay();
-		if ($pay->notify()) {
+		// $pay = new Wxpay();
+		// if ($pay->notify()) {
 			$fileName = 'wxpay' . date('His', time()) . '.txt';
-			$fileData = '支付完成:' . date('Y-m-d H:i:s', time());
+			$fileData = '支付完成_' . date('Y_m_d_H_i_s', time());
 			file_put_contents($fileName, $fileData);
-		}
+		// }
 	}
+
+	// 保存微信头像
+    protected function saveImage($url,$uid){
+        $ext = strrchr($url.'.jpg','.');
+        $data = file_get_contents($url);
+        file_put_contents('./uploads/avator/'.$uid.$ext,$data);
+        return 'avator/'.$uid.$ext;
+    }
 }
