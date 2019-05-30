@@ -1,74 +1,135 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
-    <title>微信支付样例-支付</title>
-    <script type="text/javascript">
-	function jsApiCall()
-	{
-		WeixinJSBridge.invoke(
-			'getBrandWCPayRequest',
-			{$jsApiParameters},
-			function(res){
-				WeixinJSBridge.log(res.err_msg);
-				alert(res.err_code+res.err_desc+res.err_msg);
-			}
-		);
-	}
 
-	function callpay()
-	{
-		if (typeof WeixinJSBridge == "undefined"){
-		    if( document.addEventListener ){
-		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
-		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-		    }
-		}else{
-		    jsApiCall();
-		}
-	}
-	</script>
-	<script type="text/javascript">
-	//获取共享地址
-	function editAddress()
-	{
-		WeixinJSBridge.invoke(
-			'editAddress',
-			{$editAddress},
-			function(res){
-				var value1 = res.proviceFirstStageName;
-				var value2 = res.addressCitySecondStageName;
-				var value3 = res.addressCountiesThirdStageName;
-				var value4 = res.addressDetailInfo;
-				var tel = res.telNumber;
-				
-				alert(value1 + value2 + value3 + value4 + ":" + tel);
-			}
-		);
-	}
-	
-	window.onload = function(){
-		if (typeof WeixinJSBridge == "undefined"){
-		    if( document.addEventListener ){
-		        document.addEventListener('WeixinJSBridgeReady', editAddress, false);
-		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', editAddress); 
-		        document.attachEvent('onWeixinJSBridgeReady', editAddress);
-		    }
-		}else{
-			editAddress();
-		}
-	};
-	
-	</script>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <!-- 定义页面的最新版本 -->
+    <meta name="description" content="" />
+    <!-- 网站简介 -->
+    <meta name="keywords" content="" />
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>支付</title>
+    <link href="/static/layui2.2.45/css/layui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/static/layui2.2.45/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/store/css/base.css">
+    <script src="/static/store/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/store/js/base.js"></script>
+    <!-- 字体库 -->
+    <link rel="stylesheet" type="text/css" href="/static/store/css/iconfont.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/store/css/orderSubmit.css">
+    <script src="/static/store/js/orderSubmit.js"></script>
+    <script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <style type="text/css">
+      .pay{
+        padding:15px;
+        background:#ffffff;
+        margin-top:60px;
+      }
+
+      .pay-info{
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #f2f2f2;
+        padding-bottom: 10px;
+      }
+
+      .pay-btn{
+        width: 70%;
+        height: 40px;
+        border-radius: 40px;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        color: #fff;
+        background-color: #A30002;
+        -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        margin:0 auto;
+        margin-top:30px;
+        color:#ffffff;
+      }
+
+      .pay-btn a{
+        color:#ffffff;
+      }
+    </style>
 </head>
+
 <body>
-    <br/>
-    <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
-	<div align="center">
-		<button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
-	</div>
+<!-- 头部区域 - 开始 -->
+<div class="otherTop bb">
+    <i class="iconfont icon-jiantouzuo back" onclick="history.go(-1);"></i>
+    <font class="title">支付订单</font>
+</div>
+<!-- 头部区域 - 结束 -->
+
+<div class="pay">
+  <div class="pay-info">
+    <span>订单金额</span>
+    <h4>￥ {$money}</h4>
+  </div>
+  <div class="pay-btn">
+    <a href="javascript:;">立即支付</a>
+  </div>
+</div>
+
 </body>
+
+<script type="text/javascript">
+
+layui.use(['jquery', 'layer'], function () {
+    var layer = layui.layer;
+
+    $('.pay-btn').click(function() {
+      var loadIndex = layer.load(2, {
+        shade:  [0.3,'#fff']
+      });
+
+      var _this = $(this);
+      WeixinJSBridge.invoke(
+      'getBrandWCPayRequest', {
+          "appId":"{$wxpay.appid}",     //公众号名称，由商户传入
+          "timeStamp":"{$wxpay.jsApiParameters.timeStamp}",       //时间戳，自1970年以来的秒数
+          "nonceStr":"{$wxpay.jsApiParameters.nonceStr}", //随机串
+          "package":"{$wxpay.jsApiParameters.package}",
+          "signType":"{$wxpay.jsApiParameters.signType}",         //微信签名方式：
+          "paySign":"{$wxpay.jsApiParameters.paySign}" //微信签名
+      },
+      function(res){
+          if(res.err_msg == "get_brand_wcpay_request:ok"){
+              layer.msg('支付成功');
+              layer.close(loadIndex);
+          }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+              layer.msg('支付取消');
+              layer.close(loadIndex);
+          }else if(res.err_msg == "get_brand_wcpay_request:fail"){
+              layer.msg('支付失败');
+              layer.close(loadIndex);
+          }
+      });
+
+    });
+
+
+});
+</script>
 </html>

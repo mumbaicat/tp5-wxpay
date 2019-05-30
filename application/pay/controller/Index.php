@@ -31,12 +31,13 @@ class Index extends Controller {
 		$pay->qrcode($text);
 	}
 
-	// JSAPI模式
+	// JSAPI模式，需要设置公众号授权域名、授权回调目录和API目录
 	public function jsapi() {
 		$pay = new Wxpay();
-		$res = $pay->jsPay('商品名称', 1, url('notify', '', false, true));
-		$this->assign('jsApiParameters', $res['jsApiParameters']);
-		$this->assign('editAddress', $res['editAddress']);
+        $money = 1;
+		$res = $pay->jsPay('商品名称', $money * 100, url('notify', '', false, true));
+        $this->assign('wxpay',$res);
+        $this->assign('money',$money);
 		return $this->fetch('js');
 	}
 

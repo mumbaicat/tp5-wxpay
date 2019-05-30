@@ -152,8 +152,8 @@ class Wxpay {
 		$order = WxPayApi::unifiedOrder($input);
 
 		$return = $order;
-		$return['jsApiParameters'] = $tools->GetJsApiParameters($order);
-		$return['editAddress'] = $tools->GetEditAddressParameters();
+		$return['jsApiParameters'] = json_decode($tools->GetJsApiParameters($order),true);
+		$return['editAddress'] = json_decode($tools->GetEditAddressParameters(),true);
 		return $return;
 	}
 
@@ -202,7 +202,7 @@ class Wxpay {
 	    $pc = new WxBizDataCrypt($appid, $sessionKey);
 	    $data = '';
         $errCode = $pc->decryptData($encryptedData, $iv, $data );
-        
+
         if ($errCode == 0) {
             return $data;
         } else {
